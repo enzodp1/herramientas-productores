@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buscador de rimas en español: consonantes y asonantes · Lumbra</title>
+<meta name="description" content="Encuentra palabras que riman en español. Rimas consonantes y asonantes ordenadas por sílabas y por uso, gratis y sin registro. Pensado para escribir canciones.">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&amp;family=Instrument+Sans:wght@400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="/assets/estilo.css">
+<link rel="preload" href="/datos/palabras-es.txt" as="fetch" crossorigin>
+</head>
+<body>
+
+<header class="wrap cabecera">
+  <a href="/" class="marca"><img src="/assets/logo.svg" alt=""><span>lumbra</span></a>
+  <nav class="nav" aria-label="Principal">
+    <a href="/#herramientas">Herramientas</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <p class="miga"><a href="/">Inicio</a> / Buscador de rimas</p>
+
+  <div class="cab-tool">
+    <p class="etiqueta" style="color:var(--ambar)">LETRA</p>
+    <h1>Buscador de rimas en español</h1>
+    <p>Escribe una palabra y te doy sus rimas consonantes y asonantes, agrupadas por sílabas. Primero salen las palabras que más se usan al hablar, que suelen sonar más naturales en una canción.</p>
+  </div>
+
+  <section class="panel-tool" aria-label="Buscador">
+    <form class="buscador" id="form" role="search">
+      <div class="campo">
+        <label for="palabra">Palabra</label>
+        <input id="palabra" name="p" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="corazón" required>
+      </div>
+      <button type="submit" class="btn btn-luz">Buscar rimas</button>
+    </form>
+    <p class="estado" id="estado" aria-live="polite">Cargando el diccionario…</p>
+    <div class="resultados" id="resultados" hidden></div>
+  </section>
+
+  <article class="texto-largo">
+    <h2>Cómo usar el buscador</h2>
+    <p>Escribe la palabra con la que acaba tu verso y pulsa <strong>Buscar rimas</strong>. Si la escribes sin tilde (por ejemplo, <code>cancion</code>), el buscador entiende que te refieres a <code>canción</code>. Pulsa cualquier resultado para buscar sus rimas y seguir tirando del hilo.</p>
+    <p>Las palabras de cada grupo van de más a menos frecuentes. Las primeras son las que cualquiera entiende a la primera; las del final pueden darte una imagen más original, pero también pueden sonar forzadas si no encajan con el resto de la letra.</p>
+
+    <h2>Rima consonante y rima asonante</h2>
+    <p>Las dos se cuentan desde la <strong>última vocal acentuada</strong> del verso, que es la que se canta con más fuerza.</p>
+    <ul>
+      <li><strong>Consonante:</strong> coinciden todos los sonidos desde esa vocal: <em>camino</em> con <em>destino</em>, <em>corazón</em> con <em>canción</em>. Es una rima cerrada y muy evidente al oído.</li>
+      <li><strong>Asonante:</strong> solo coinciden las vocales: <em>camino</em> con <em>libro</em> (i-o), <em>luna</em> con <em>nunca</em> (u-a). Es más discreta y te deja muchas más palabras donde elegir.</li>
+    </ul>
+    <p>En la canción actual en español, del pop al reguetón, la asonante es la más habitual: da libertad para decir lo que quieres sin que la rima se note demasiado. La consonante funciona bien para cerrar un estribillo o remarcar una idea.</p>
+
+    <h2>Qué tiene en cuenta el buscador</h2>
+    <ul>
+      <li><strong>Cómo suena, no cómo se escribe.</strong> La <em>b</em> y la <em>v</em> riman entre sí, la <em>h</em> no cuenta y <em>ce</em> suena igual que <em>ze</em>. Distingue la <em>s</em> de la <em>z</em>, como se pronuncia en la mayor parte de España.</li>
+      <li><strong>Diptongos.</strong> En <em>patria</em> la <em>i</em> no cuenta para la asonancia: rima en a-a, igual que <em>casa</em>.</li>
+      <li><strong>Sílabas.</strong> Los grupos van por número de sílabas gramaticales. Al cantar pueden cambiar por las sinalefas (cuando una palabra acaba en vocal y la siguiente empieza por vocal y se unen en una sola sílaba).</li>
+    </ul>
+
+    <h2>Consejos para rimar mejor</h2>
+    <ul>
+      <li>Decide primero qué quieres decir y busca la rima después. Si cambias la idea para que rime, se nota.</li>
+      <li>Rima palabras de distinta categoría (un verbo con un sustantivo) en vez de dos verbos con la misma terminación, como <em>amando</em> y <em>cantando</em>. Suena menos previsible.</li>
+      <li>Cuidado con la posición del acento: una palabra aguda (<em>amor</em>) y una llana (<em>flores</em>) caen distinto en la melodía, aunque compartan vocal.</li>
+    </ul>
+    <p>Lo ha hecho Enzo Pazos, compositor y productor, para escribir sus propias canciones. Funciona entero en tu navegador: lo que buscas no se envía a ningún sitio.</p>
+  </article>
+</main>
+
+<footer class="wrap pie">
+  <span><img src="/assets/logo.svg" alt="">Lumbra · herramientas de Enzo Pazos, músico y productor</span>
+  <span>Luz cálida en la sombra.</span>
+</footer>
+
+<script src="/assets/rimas.js"></script>
+<script>
+(function () {
+  var form = document.getElementById('form');
+  var input = document.getElementById('palabra');
+  var estado = document.getElementById('estado');
+  var caja = document.getElementById('resultados');
+  var dicc = null;
+  var VISIBLES = 40;
+
+  function el(tag, attrs, texto) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (texto != null) e.textContent = texto;
+    return e;
+  }
+
+  function enlace(w) {
+    var li = el('li');
+    var a = el('a', { href: '?p=' + encodeURIComponent(w) }, w);
+    a.addEventListener('click', function (ev) { ev.preventDefault(); buscar(w, true); window.scrollTo({ top: form.offsetTop - 20, behavior: 'smooth' }); });
+    li.appendChild(a);
+    return li;
+  }
+
+  function bloque(titulo, grupos, vacio) {
+    var g = el('div', { 'class': 'grupo' });
+    g.appendChild(el('h2', null, titulo));
+    if (!grupos.length) { g.appendChild(el('p', { 'class': 'estado' }, vacio)); return g; }
+    grupos.forEach(function (gr) {
+      g.appendChild(el('h3', null, gr.silabas === 1 ? '1 sílaba' : gr.silabas + ' sílabas'));
+      var ul = el('ul', { 'class': 'palabras' });
+      gr.palabras.slice(0, VISIBLES).forEach(function (w) { ul.appendChild(enlace(w)); });
+      g.appendChild(ul);
+      if (gr.palabras.length > VISIBLES) {
+        var b = el('button', { type: 'button', 'class': 'mas' }, 'Ver ' + (gr.palabras.length - VISIBLES) + ' más');
+        b.addEventListener('click', function () {
+          gr.palabras.slice(VISIBLES).forEach(function (w) { ul.appendChild(enlace(w)); });
+          b.remove();
+        });
+        g.appendChild(b);
+      }
+    });
+    return g;
+  }
+
+  function buscar(texto, guardar) {
+    if (!dicc) return;
+    var r = dicc.rimas(texto);
+    caja.innerHTML = '';
+    if (!r) { caja.hidden = true; estado.textContent = 'Escribe una palabra en español, solo con letras.'; return; }
+    input.value = r.palabra;
+    document.title = 'Rimas con ' + r.palabra + ' · Lumbra';
+    if (guardar) history.replaceState(null, '', '?p=' + encodeURIComponent(r.palabra));
+    var aviso = r.sugerencia ? 'Mostrando rimas de «' + r.sugerencia + '». ' : (!r.conocida ? 'No tengo «' + r.palabra + '» en el diccionario, pero calculo sus rimas igualmente. ' : '');
+    estado.textContent = aviso + r.totalConsonantes + ' consonantes y ' + r.totalAsonantes + ' asonantes.';
+    var c = r.claves;
+    caja.appendChild(el('p', { 'class': 'datos-palabra' }, r.palabra + ' · ' + c.silabas + (c.silabas === 1 ? ' sílaba' : ' sílabas') + ' · ' + (c.aguda ? 'aguda' : 'llana o esdrújula') + ' · vocales ' + c.asonante.toUpperCase()));
+    caja.appendChild(bloque('CONSONANTES · -' + c.terminacion.toUpperCase(), r.consonantes, 'No encuentro rimas consonantes. Prueba con las asonantes.'));
+    caja.appendChild(el('div', { 'class': 'separador' }));
+    caja.appendChild(bloque('ASONANTES · ' + c.asonante.toUpperCase(), r.asonantes, 'No encuentro rimas asonantes.'));
+    caja.hidden = false;
+  }
+
+  form.addEventListener('submit', function (ev) { ev.preventDefault(); buscar(input.value, true); });
+
+  fetch('/datos/palabras-es.txt').then(function (res) {
+    if (!res.ok) throw new Error(res.status);
+    return res.text();
+  }).then(function (t) {
+    dicc = new LumbraRimas.Diccionario(t);
+    estado.textContent = 'Listo: ' + dicc.palabras.length.toLocaleString('es-ES') + ' palabras.';
+    var p = new URLSearchParams(location.search).get('p');
+    if (p) buscar(p, false); else input.focus();
+  }).catch(function () {
+    estado.textContent = 'No he podido cargar el diccionario. Recarga la página.';
+  });
+})();
+</script>
+</body>
+</html>
