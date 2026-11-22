@@ -88,6 +88,7 @@ input:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(-
 .buscador{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
 .buscador .campo{display:flex;flex-direction:column;gap:8px;flex:1 1 280px}
 .buscador label{font-size:13px;font-weight:600}
+.buscador input{width:100%;min-width:0}
 .resultados{background:var(--resplandor);border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:28px}
 .resultados[hidden]{display:none}
 .grupo{display:flex;flex-direction:column;gap:12px}
@@ -102,7 +103,7 @@ input:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(-
 .datos-palabra b{color:var(--texto);font-weight:500}
 .mas{align-self:flex-start;background:none;border:1px solid var(--linea-resp);color:var(--ambar-claro);border-radius:8px;padding:8px 14px;font:600 14px var(--sans);cursor:pointer;min-height:40px}
 
-.texto-largo{max-width:760px;padding:72px 0 96px;display:flex;flex-direction:column;gap:18px}
+.texto-largo{scroll-margin-top:24px;max-width:760px;padding:72px 0 96px;display:flex;flex-direction:column;gap:18px}
 .texto-largo h2{margin:24px 0 0;font-family:var(--serif);font-weight:400;font-size:34px;line-height:40px}
 .texto-largo h3{margin:12px 0 0;font-size:19px}
 .texto-largo p,.texto-largo li{margin:0;font-size:17px;line-height:29px;color:var(--suave)}
@@ -110,6 +111,11 @@ input:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(-
 .texto-largo strong{color:var(--texto);font-weight:600}
 .texto-largo code{font-family:var(--mono);font-size:15px;color:var(--ambar-claro)}
 
+.ir-info{align-self:flex-start;font-size:15px;font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding:4px 0}
+.volver{position:fixed;right:20px;bottom:20px;z-index:10;display:inline-flex;align-items:center;min-height:48px;padding:0 20px;border-radius:999px;background:var(--ambar);color:#1A1108;font:600 15px/1 var(--sans);text-decoration:none;box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 48px rgba(242,165,65,.25)}
+.volver:hover{background:var(--ambar-claro);color:#1A1108}
+.volver[hidden]{display:none}
+html{scroll-behavior:smooth}
 @media (max-width:720px){
   .wrap{padding:0 20px}
   .hero h1{font-size:44px;line-height:48px}
