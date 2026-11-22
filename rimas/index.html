@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Buscador de rimas en español: consonantes y asonantes · Lumbra</title>
-<meta name="description" content="Encuentra palabras que riman en español. Rimas consonantes y asonantes ordenadas por sílabas y por uso, gratis y sin registro. Pensado para escribir canciones.">
+<meta name="description" content="Encuentra palabras que riman en español. Rimas consonantes y asonantes filtradas por el tema de tu canción y por sílabas, gratis y sin registro. Pensado para escribir canciones.">
 <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,16 +28,51 @@
   <div class="cab-tool">
     <p class="etiqueta" style="color:var(--ambar)">LETRA</p>
     <h1>Buscador de rimas en español</h1>
-    <p>Escribe una palabra y te doy sus rimas consonantes y asonantes, agrupadas por sílabas. Primero salen las palabras que más se usan al hablar, que suelen sonar más naturales en una canción.</p>
+    <p>Escribe una palabra y te doy sus rimas consonantes y asonantes. Si además pones de qué va tu canción, primero salen las rimas que encajan con esa idea.</p>
   </div>
 
   <section class="panel-tool" id="buscador" aria-label="Buscador">
     <form class="buscador" id="form" role="search">
-      <div class="campo">
+      <div class="campo campo-palabra">
         <label for="palabra">Palabra</label>
         <input id="palabra" name="p" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="corazón" required>
       </div>
+      <div class="campo campo-contexto">
+        <label for="contexto">De qué va tu canción <span class="opcional">opcional</span></label>
+        <input id="contexto" name="c" type="text" autocomplete="off" autocapitalize="off" placeholder="desamor, noche, lágrimas">
+      </div>
       <button type="submit" class="btn btn-luz">Buscar rimas</button>
+      <div class="filtros">
+        <div class="ideas" aria-label="Ideas de contexto">
+          <span class="etq">Ideas</span>
+          <button type="button" data-c="desamor, lágrimas, adiós">desamor</button>
+          <button type="button" data-c="fiesta, baile, noche">fiesta</button>
+          <button type="button" data-c="mar, playa, verano">verano</button>
+          <button type="button" data-c="barrio, calle, dinero">calle</button>
+          <button type="button" data-c="fe, dios, esperanza">fe</button>
+          <button type="button" data-c="beso, deseo, piel">deseo</button>
+          <button type="button" data-c="familia, madre, hogar">familia</button>
+          <button type="button" data-c="libertad, viaje, carretera">libertad</button>
+        </div>
+        <div class="selectores">
+          <label>Rima
+            <select id="tipo" name="t">
+              <option value="">Las dos</option>
+              <option value="c">Consonante</option>
+              <option value="a">Asonante</option>
+            </select>
+          </label>
+          <label>Sílabas
+            <select id="silabas" name="s">
+              <option value="">Todas</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4 o más</option>
+            </select>
+          </label>
+        </div>
+      </div>
     </form>
     <a href="#como-funciona" class="ir-info">Cómo funciona y qué es cada tipo de rima ↓</a>
     <p class="estado" id="estado" aria-live="polite">Cargando el diccionario…</p>
@@ -47,7 +82,10 @@
   <article class="texto-largo" id="como-funciona">
     <h2>Cómo usar el buscador</h2>
     <p>Escribe la palabra con la que acaba tu verso y pulsa <strong>Buscar rimas</strong>. Si la escribes sin tilde (por ejemplo, <code>cancion</code>), el buscador entiende que te refieres a <code>canción</code>. Pulsa cualquier resultado para buscar sus rimas y seguir tirando del hilo.</p>
-    <p>Las palabras de cada grupo van de más a menos frecuentes. Las primeras son las que cualquiera entiende a la primera; las del final pueden darte una imagen más original, pero también pueden sonar forzadas si no encajan con el resto de la letra.</p>
+    <h3>Rimas según el contexto</h3>
+    <p>Una palabra como <em>corazón</em> tiene cientos de rimas, pero en tu canción solo sirven unas pocas. En el campo <strong>De qué va tu canción</strong> escribe dos o tres palabras del tema (<code>desamor, noche, lágrimas</code>) y el buscador pondrá primero las rimas más cercanas a esa idea. Con <em>fiesta, baile</em>, las asonantes de <em>corazón</em> empiezan por <em>bailó</em>, <em>show</em> o <em>rock</em>; con <em>traición, celos</em>, las de <em>amor</em> empiezan por <em>temor</em>, <em>rencor</em> o <em>terror</em>.</p>
+    <p>Funciona con un mapa de significados aprendido de millones de textos en español, que sabe qué palabras suelen aparecer juntas. No escribe por ti: te acerca las rimas que encajan para que elijas tú. También puedes filtrar por tipo de rima y por número de sílabas.</p>
+    <p>Sin contexto, las palabras de cada grupo van de más a menos frecuentes. Las primeras son las que cualquiera entiende a la primera; las del final pueden darte una imagen más original, pero también pueden sonar forzadas si no encajan con el resto de la letra.</p>
 
     <h2>Rima consonante y rima asonante</h2>
     <p>Las dos se cuentan desde la <strong>última vocal acentuada</strong> del verso, que es la que se canta con más fuerza.</p>
@@ -86,10 +124,14 @@
 (function () {
   var form = document.getElementById('form');
   var input = document.getElementById('palabra');
+  var inputCtx = document.getElementById('contexto');
+  var selTipo = document.getElementById('tipo');
+  var selSil = document.getElementById('silabas');
   var estado = document.getElementById('estado');
   var caja = document.getElementById('resultados');
-  var dicc = null;
-  var VISIBLES = 40;
+  var dicc = null, vectores = null;
+  var VISIBLES = 16;      // por grupo de sílabas, sin contexto
+  var VISIBLES_CTX = 24;  // con contexto, las más afines primero
 
   function el(tag, attrs, texto) {
     var e = document.createElement(tag);
@@ -98,50 +140,117 @@
     return e;
   }
 
+  // El archivo de significados (≈2 MB) solo se descarga si se usa el contexto.
+  function cargarVectores() {
+    if (!vectores) {
+      vectores = fetch('/datos/vectores-es.bin').then(function (res) {
+        if (!res.ok) throw new Error(res.status);
+        return res.arrayBuffer();
+      }).then(function (b) { dicc.cargarVectores(b); }).catch(function (e) { vectores = null; throw e; });
+    }
+    return vectores;
+  }
+
   function enlace(w) {
     var li = el('li');
     var a = el('a', { href: '?p=' + encodeURIComponent(w) }, w);
-    a.addEventListener('click', function (ev) { ev.preventDefault(); buscar(w, true); window.scrollTo({ top: form.offsetTop - 20, behavior: 'smooth' }); });
+    a.addEventListener('click', function (ev) { ev.preventDefault(); input.value = w; buscar(true); window.scrollTo({ top: form.offsetTop - 20, behavior: 'smooth' }); });
     li.appendChild(a);
     return li;
   }
 
-  function bloque(titulo, grupos, vacio) {
+  function lista(palabras, n) {
+    var ul = el('ul', { 'class': 'palabras' });
+    palabras.slice(0, n).forEach(function (w) { ul.appendChild(enlace(w)); });
+    var frag = document.createDocumentFragment();
+    frag.appendChild(ul);
+    if (palabras.length > n) {
+      var mostradas = n;
+      var b = el('button', { type: 'button', 'class': 'mas' });
+      var rotulo = function () { b.textContent = 'Ver ' + Math.min(n, palabras.length - mostradas) + ' más'; };
+      rotulo();
+      b.addEventListener('click', function () {
+        palabras.slice(mostradas, mostradas + n).forEach(function (w) { ul.appendChild(enlace(w)); });
+        mostradas += n;
+        if (mostradas >= palabras.length) b.remove(); else rotulo();
+      });
+      frag.appendChild(b);
+    }
+    return frag;
+  }
+
+  function bloque(titulo, datos, conContexto, vacio) {
     var g = el('div', { 'class': 'grupo' });
     g.appendChild(el('h2', null, titulo));
-    if (!grupos.length) { g.appendChild(el('p', { 'class': 'estado' }, vacio)); return g; }
-    grupos.forEach(function (gr) {
+    if (!datos.length) { g.appendChild(el('p', { 'class': 'estado' }, vacio)); return g; }
+    if (conContexto) {
+      g.appendChild(lista(datos.map(function (x) { return x.palabra; }), VISIBLES_CTX));
+      return g;
+    }
+    datos.forEach(function (gr) {
       g.appendChild(el('h3', null, gr.silabas === 1 ? '1 sílaba' : gr.silabas + ' sílabas'));
-      var ul = el('ul', { 'class': 'palabras' });
-      gr.palabras.slice(0, VISIBLES).forEach(function (w) { ul.appendChild(enlace(w)); });
-      g.appendChild(ul);
-      if (gr.palabras.length > VISIBLES) {
-        var b = el('button', { type: 'button', 'class': 'mas' }, 'Ver ' + (gr.palabras.length - VISIBLES) + ' más');
-        b.addEventListener('click', function () {
-          gr.palabras.slice(VISIBLES).forEach(function (w) { ul.appendChild(enlace(w)); });
-          b.remove();
-        });
-        g.appendChild(b);
-      }
+      g.appendChild(lista(gr.palabras, VISIBLES));
     });
     return g;
   }
 
-  function buscar(texto, guardar) {
+  function guardarURL(p) {
+    var q = new URLSearchParams();
+    q.set('p', p);
+    if (inputCtx.value.trim()) q.set('c', inputCtx.value.trim());
+    if (selTipo.value) q.set('t', selTipo.value);
+    if (selSil.value) q.set('s', selSil.value);
+    history.replaceState(null, '', '?' + q.toString());
+  }
+
+  function buscar(guardar) {
     if (!dicc) return;
-    var r = dicc.rimas(texto);
+    var textoCtx = inputCtx.value.trim();
+    if (textoCtx && !dicc.vec) {
+      estado.textContent = 'Cargando los significados para usar el contexto…';
+      cargarVectores().then(function () { buscar(guardar); }, function () {
+        estado.textContent = 'No he podido cargar el contexto. Te muestro todas las rimas.';
+        pintar(null, guardar);
+      });
+      return;
+    }
+    pintar(textoCtx ? dicc.contexto(textoCtx) : null, guardar);
+  }
+
+  function pintar(ctx, guardar) {
+    var opciones = { silabas: selSil.value ? Number(selSil.value) : 0 };
+    if (ctx && ctx.vector) opciones.contexto = ctx.vector;
+    var r = dicc.rimas(input.value, opciones);
     caja.innerHTML = '';
     if (!r) { caja.hidden = true; estado.textContent = 'Escribe una palabra en español, solo con letras.'; return; }
     input.value = r.palabra;
     document.title = 'Rimas con ' + r.palabra + ' · Lumbra';
-    if (guardar) history.replaceState(null, '', '?p=' + encodeURIComponent(r.palabra));
+    if (guardar) guardarURL(r.palabra);
+
     var aviso = r.sugerencia ? 'Mostrando rimas de «' + r.sugerencia + '». ' : (!r.conocida ? 'No tengo «' + r.palabra + '» en el diccionario, pero calculo sus rimas igualmente. ' : '');
-    estado.textContent = aviso + r.totalConsonantes + ' consonantes y ' + r.totalAsonantes + ' asonantes.';
+    var tipo = selTipo.value;
+    var cuenta = tipo === 'c' ? r.totalConsonantes + ' consonantes' : tipo === 'a' ? r.totalAsonantes + ' asonantes' : r.totalConsonantes + ' consonantes y ' + r.totalAsonantes + ' asonantes';
+    estado.textContent = aviso + cuenta + (selSil.value ? ' de ' + selSil.options[selSil.selectedIndex].text.replace(' o más', '+') + ' sílabas' : '') + '.';
+
     var c = r.claves;
     caja.appendChild(el('p', { 'class': 'datos-palabra' }, r.palabra + ' · ' + c.silabas + (c.silabas === 1 ? ' sílaba' : ' sílabas') + ' · ' + (c.aguda ? 'aguda' : 'llana o esdrújula') + ' · vocales ' + c.asonante.toUpperCase()));
-    caja.appendChild(bloque('CONSONANTES · -' + c.terminacion.toUpperCase(), r.consonantes, 'No encuentro rimas consonantes. Prueba con las asonantes.'));
-    caja.appendChild(el('div', { 'class': 'separador' }));
-    caja.appendChild(bloque('ASONANTES · ' + c.asonante.toUpperCase(), r.asonantes, 'No encuentro rimas asonantes.'));
+
+    if (ctx) {
+      var nota = el('p', { 'class': 'nota-contexto' });
+      if (ctx.vector) {
+        nota.appendChild(document.createTextNode('Ordenadas por cercanía a: '));
+        nota.appendChild(el('b', null, ctx.usadas.join(', ')));
+        nota.appendChild(document.createTextNode('. Las primeras son las que mejor encajan.'));
+      } else {
+        nota.textContent = 'No reconozco ninguna palabra del contexto. Te muestro todas las rimas.';
+      }
+      if (ctx.vector && ctx.ignoradas.length) nota.appendChild(document.createTextNode(' No reconozco: ' + ctx.ignoradas.join(', ') + '.'));
+      caja.appendChild(nota);
+    }
+
+    if (tipo !== 'a') caja.appendChild(bloque('CONSONANTES · -' + c.terminacion.toUpperCase(), r.consonantes, r.conContexto, 'No encuentro rimas consonantes con estos filtros. Prueba con las asonantes.'));
+    if (!tipo) caja.appendChild(el('div', { 'class': 'separador' }));
+    if (tipo !== 'c') caja.appendChild(bloque('ASONANTES · ' + c.asonante.toUpperCase(), r.asonantes, r.conContexto, 'No encuentro rimas asonantes con estos filtros.'));
     caja.hidden = false;
   }
 
@@ -157,7 +266,17 @@
     setTimeout(function () { input.focus({ preventScroll: true }); input.select(); }, 400);
   });
 
-  form.addEventListener('submit', function (ev) { ev.preventDefault(); buscar(input.value, true); });
+  form.addEventListener('submit', function (ev) { ev.preventDefault(); buscar(true); });
+  [selTipo, selSil].forEach(function (s) {
+    s.addEventListener('change', function () { if (input.value.trim()) buscar(true); });
+  });
+  inputCtx.addEventListener('focus', function () { if (dicc) cargarVectores().catch(function () {}); });
+  Array.prototype.forEach.call(document.querySelectorAll('.ideas button'), function (b) {
+    b.addEventListener('click', function () {
+      inputCtx.value = b.getAttribute('data-c');
+      if (input.value.trim()) buscar(true); else input.focus();
+    });
+  });
 
   fetch('/datos/palabras-es.txt').then(function (res) {
     if (!res.ok) throw new Error(res.status);
@@ -165,8 +284,11 @@
   }).then(function (t) {
     dicc = new LumbraRimas.Diccionario(t);
     estado.textContent = 'Listo: ' + dicc.palabras.length.toLocaleString('es-ES') + ' palabras.';
-    var p = new URLSearchParams(location.search).get('p');
-    if (p) buscar(p, false); else input.focus();
+    var q = new URLSearchParams(location.search);
+    if (q.get('c')) inputCtx.value = q.get('c');
+    if (q.get('t')) selTipo.value = q.get('t');
+    if (q.get('s')) selSil.value = q.get('s');
+    if (q.get('p')) { input.value = q.get('p'); buscar(false); } else input.focus();
   }).catch(function () {
     estado.textContent = 'No he podido cargar el diccionario. Recarga la página.';
   });
