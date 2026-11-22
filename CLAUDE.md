@@ -8,3 +8,6 @@ Resumen completo de decisiones: doc del proyecto de Claude `claude/web-herramien
 - Todo funciona en el navegador: sin servidor, coste de mantenimiento 0 €.
 - Visual: fondo oscuro cálido #14100C, una sola luz ámbar #F2A541 por pantalla, contrapunto azul mínimo. Fuentes: Fraunces, Instrument Sans, JetBrains Mono.
 - Hosting: Netlify o Cloudflare Pages desde la rama main. Dominio pendiente (se compra al final).
+- Solo se muestra lo que está terminado: nada de "próximamente", ni secciones de plugins o listas de correo hasta que existan.
+- La web está oculta a buscadores (meta noindex + robots.txt Disallow) hasta que Enzo decida lanzarla. Quitarlo es el paso de lanzamiento.
+- Perilla común de los plugins: Filamento (EN: Filament).
